@@ -1,16 +1,64 @@
 import os
+import subprocess
 import httpx
 from datetime import datetime
-from agents import Agent, OpenAIChatCompletionsModel, AsyncOpenAI, function_tool
+from agents import (
+    Agent, 
+    OpenAIChatCompletionsModel, 
+    AsyncOpenAI, 
+    function_tool,
+    SQLiteSession
+)
 from dotenv import load_dotenv
 
 load_dotenv()
 
+# Agents Base
+
+def get_model() -> OpenAIChatCompletionsModel:
+    """
+    Função que instancia e retorna um OpenAIChatCompletionsModel.
+    """
+    model: OpenAIChatCompletionsModel = OpenAIChatCompletionsModel(
+        model='gemini-2.0-flash',
+        openai_client=AsyncOpenAI(
+            api_key=os.environ.get('GOOGLE_AI_KEY'), 
+            base_url="https://generativelanguage.googleapis.com/v1beta",
+        )
+    )
+
+    return model
+
+
+def get_agent(name: str, instructions: str = None, tools: list[any]=[]) -> Agent:
+    """
+    Função que instancia e retorna um Agent baseado
+    no nome, instruções e tools recebidas via parâmetro.
+    """
+    agente: Agent = Agent(
+        name=name,
+        instructions=instructions,
+        model=get_model(),
+        tools=tools
+    )
+
+    return agente
+
+
+def get_session(session_id: str, db_path="session.db"):
+    session = SQLiteSession(session_id=session_id, db_path=db_path)
+
+    return session
+
+
+# Tools
 
 @function_tool
 async def get_weather(location: str) -> str:
     """
-    https://www.weatherapi.com/
+    Função que recebe uma localização via parâmetro,
+    busca e retorna a temperatura e condições climáticas
+    na API da WeatherAPI.com 
     """
     url = "https://api.weatherapi.com/v1/current.json"
     params = {
@@ -28,33 +76,31 @@ async def get_weather(location: str) -> str:
             condition = data['current']['condition']['text']
 
             return f"Em {location}, a temperatura está {temp} e as condições {condition}"
-        except:
-            return f"Não foi possível fazer a requisição para {location}"
+        except Exception as e:
+            return f"Não foi possível fazer a requisição para {location} : {e}"
 
 
 @function_tool
 def get_current_time() -> datetime:
+    """
+    Função que returna a hora atual.
+    """
     return datetime.now()
 
-
-def get_model() -> OpenAIChatCompletionsModel:
-    model: OpenAIChatCompletionsModel = OpenAIChatCompletionsModel(
-        model='gemini-2.0-flash',
-        openai_client=AsyncOpenAI(
-            api_key=os.environ.get('GOOGLE_AI_KEY'), 
-            base_url="https://generativelanguage.googleapis.com/v1beta",
-        )
+@function_tool
+def terminal_command(arg: str):
+    """
+    Função que insere um comando de terminal e mostra a saída.
+    """
+    return subprocess.run(
+        arg, shell=True, 
+        stdout=subprocess.PIPE, 
+        stdin=subprocess.PIPE
     )
 
-    return model
 
 
-def get_agent(name: str, instructions: str, tools: list[any]=[]) -> Agent:
-    agente: Agent = Agent(
-        name=name,
-        instructions=instructions,
-        model=get_model(),
-        tools=tools
-    )
-
-    return agente
+if __name__ == '__main__':
+    import asyncio
+    ret = asyncio.run(get_weather(location='São Paulo'))
+    print(ret)
