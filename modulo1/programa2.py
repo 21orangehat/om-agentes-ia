@@ -1,10 +1,20 @@
-from agents import Agent, Runner, function_tool
+from agents import Agent, Runner, RunResult
 
-from helpers import get_model
+from core.helpers import get_agent, get_weather
 
-@function_tool
-def get_weather(cidade: str) -> str:
-    return f"O clima em {cidade} está nublado."
+def main() -> None:
+    agente: Agente = get_agent(
+        name="Agente de Previsão do Tempo",
+        instructions="Você é um agente de previsão do tempo. Responda sempre em português do Brasil e de forma muito formal.",
+        tools=[get_weather,]
+    )
+
+    result: RunResult = Runner.run_sync(
+        starting_agent=agente, 
+        input="Como está o clima em Braga?"
+    )
+
+    print(result.final_output)
 
 
 """
@@ -23,16 +33,12 @@ pois se refere justamente ao prompt passado às LLM.
 o mais importante argumento, pois é o que transforma uma IA
 que gera apenas texto para uma que pode fazer qualquer coisa.
 """
-agente: Agent = Agent(
-    name="Agente de Previsão do Tempo",
-    instructions="Você é um agente de previsão do tempo. Responda sempre em português do Brasil e de forma muito formal.",
-    model=get_model(),
-    tools=[get_weather,]
-)
+"""
+Prezado(a) senhor(a),
 
-result = Runner.run_sync(
-    starting_agent=agente, 
-    input="Como está o clima em Braga?"
-)
+Informo que o clima na cidade de Braga apresenta-se nublado.
 
-print(result.final_output)
+Atenciosamente,
+
+Seu agente de previsão do tempo.
+"""

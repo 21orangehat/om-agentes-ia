@@ -2,22 +2,22 @@
 # https://medium.com/@danushidk507/openai-agents-sdk-with-ollama-fc85da11755d
 # https://dev.to/itshayder/breaking-free-ai-api-keys-2025-3-secret-platforms-replacing-paid-services-2708
 # https://aistudio.google.com/apikey
-from agents import Agent, Runner
+from agents import Agent, Runner, RunResult
 
-from helpers import get_model
+from core.helpers import get_agent
 
-agente: Agent = Agent(
-    name="Agente Principal",
-    instructions="Você é um assistente prestativo. Seja direto ao ponto.",
-    model=get_model()
-)
+def main() -> None:
+    agente: Agente = get_agent(
+        name="Agente Principal",
+        instructions="Você é um assistente prestativo. Seja direto ao ponto."
+    )
 
-result = Runner.run_sync(
-    starting_agent=agente, 
-    input="Me escreva um poema sobre python"
-)
+    result: RunResult = Runner.run_sync(
+        starting_agent=agente, 
+        input="Me escreva um poema sobre python"
+    )
 
-print(result.final_output)
+    print(result.final_output)
 
 """
 Com certeza! Aqui está um poema sobre Python:
