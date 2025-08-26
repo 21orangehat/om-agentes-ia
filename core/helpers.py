@@ -2,6 +2,7 @@ import os
 import subprocess
 import httpx
 from datetime import datetime
+from typing import List
 from agents import (
     Agent, 
     OpenAIChatCompletionsModel, 
@@ -12,7 +13,7 @@ from agents import (
 )
 from dotenv import load_dotenv
 
-from core.models import UserInfo
+from core.models import UserInfo, Cliente, Compra
 
 load_dotenv()
 
@@ -118,6 +119,25 @@ def update_user_info(wrapper: RunContextWrapper[UserInfo], nome: str, cargo: str
     wrapper.context.nome = nome
     wrapper.context.cargo = cargo
     return "Informações atualizadas com sucesso."
+
+
+@function_tool
+def get_client_recent_purchases(wrapper: RunContextWrapper[Cliente], n: int) -> str:
+    """
+    Função que retorna as 3 últimas compras de um cliente.
+    """
+    compras: List[Compra] = wrapper.context.get_recent_purchases(n)
+
+    purchase_list = '. '.join([f"{c.produto} US$({c.preco:.2f})" for c in compras])
+
+    return f"Compras: {purchase_list}"
+
+@function_tool
+def get_client_info(wrapper: RunContextWrapper[Cliente]) -> str:
+    """
+    Função que retorna informações de um cliente.
+    """
+    return f"ID Cliente: {wrapper.context.id}\nCliente: {wrapper.context.nome}"
 
 
 if __name__ == '__main__':
