@@ -7,9 +7,12 @@ from agents import (
     OpenAIChatCompletionsModel, 
     AsyncOpenAI, 
     function_tool,
-    SQLiteSession
+    SQLiteSession,
+    RunContextWrapper
 )
 from dotenv import load_dotenv
+
+from core.models import UserInfo
 
 load_dotenv()
 
@@ -98,6 +101,23 @@ def terminal_command(arg: str):
         stdin=subprocess.PIPE
     )
 
+
+@function_tool
+def fetch_user_info(wrapper: RunContextWrapper[UserInfo]) -> str:
+    """
+    Função que busca informações dos nossos funcionários.
+    """
+    return f"O nome do deste funcionário é {wrapper.context.nome} e seu cargo é {wrapper.context.cargo}"
+
+
+@function_tool
+def update_user_info(wrapper: RunContextWrapper[UserInfo], nome: str, cargo: str) -> str:
+    """
+    Função que atuaiza informações dos nossos funcionários.
+    """
+    wrapper.context.nome = nome
+    wrapper.context.cargo = cargo
+    return "Informações atualizadas com sucesso."
 
 
 if __name__ == '__main__':
