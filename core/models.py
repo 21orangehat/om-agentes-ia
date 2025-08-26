@@ -31,6 +31,7 @@ class Cliente():
     id: str
     nome: str
     compras: List[Compra]
+    novo: bool = True
     
     def get_recent_purchases(self, n: int = 3) -> List[Compra]:
         """

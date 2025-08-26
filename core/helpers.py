@@ -55,6 +55,17 @@ def get_session(session_id: str, db_path="session.db"):
     return session
 
 
+def dynamic_client_instructions(wrapper: RunContextWrapper[Cliente], agent: Agent[Cliente]) -> str:
+    """
+    Função para gerar instruções dinâmicas de acordo com o cliente.
+    """
+    novo: bool = wrapper.context.novo
+
+    if novo:
+        return f"Você é um assistente de suporte. O usuário chama-se {wrapper.context.nome} e ele é novo na plataforma. Explique tudo com calma, de maneira detalhada e amivável. Seja paciente e muito didático."
+    return f"Você é um assistente de suporte experiente e direto. O usuário chama-se {wrapper.context.nome} e já é nosso cliente antigo da plataforma. Responsa a ele de forma clara e direta, sem enrolação mas sempre com educação."
+
+
 # Tools
 
 @function_tool
