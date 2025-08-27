@@ -151,6 +151,7 @@ def get_client_info(wrapper: RunContextWrapper[Cliente]) -> str:
     return f"ID Cliente: {wrapper.context.id}\nCliente: {wrapper.context.nome}"
 
 
+
 if __name__ == '__main__':
     import asyncio
     ret = asyncio.run(get_weather(location='São Paulo'))

@@ -11,6 +11,8 @@ from modulo3.programa2 import main as m3p2main
 from modulo3.programa3 import main as m3p3main
 from modulo3.programa4 import main as m3p4main
 
+from modulo4.programa1 import main as m4p1main
+
 
 if __name__ == '__main__':
     # Programas do módulo 1
@@ -27,4 +29,7 @@ if __name__ == '__main__':
     # m3p1main()
     # m3p2main()
     # m3p3main()
-    m3p4main()
+    # m3p4main()
+
+    # Programas do módulo 4
+    m4p1main()
