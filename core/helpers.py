@@ -3,6 +3,7 @@ import subprocess
 import httpx
 from datetime import datetime
 from typing import List
+from random import randint
 from agents import (
     Agent, 
     OpenAIChatCompletionsModel, 
@@ -150,6 +151,15 @@ def get_client_info(wrapper: RunContextWrapper[Cliente]) -> str:
     """
     return f"ID Cliente: {wrapper.context.id}\nCliente: {wrapper.context.nome}"
 
+
+@function_tool
+def get_number():
+    """
+    Função para retornar um número inteiro, pseudo-alattório,
+    entre 1 e 20.
+    """
+    n = randint(1, 20)
+    return n
 
 
 if __name__ == '__main__':
