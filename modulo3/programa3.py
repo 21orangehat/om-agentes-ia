@@ -3,7 +3,8 @@ from uuid import uuid4
 from agents import (
     Agent, 
     Runner, 
-    RunResult
+    RunResult,
+    SQLiteSession
 )
 
 from core.helpers import (

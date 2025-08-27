@@ -4,7 +4,8 @@ from agents import (
     Agent, 
     Runner, 
     RunResult,
-    RunContextWrapper
+    RunContextWrapper,
+    SQLiteSession
 )
 
 from core.helpers import (

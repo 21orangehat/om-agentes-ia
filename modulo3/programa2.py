@@ -1,7 +1,8 @@
 from agents import (
     Agent, 
     Runner, 
-    RunResult
+    RunResult,
+    SQLiteSession
 )
 
 from core.helpers import (
