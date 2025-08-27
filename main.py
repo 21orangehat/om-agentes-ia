@@ -15,6 +15,7 @@ from modulo4.programa1 import main as m4p1main
 from modulo4.programa2 import main as m4p2main
 from modulo4.programa3 import main as m4p3main
 from modulo4.programa4 import main as m4p4main
+from modulo4.programa5 import main as m4p5main
 
 
 if __name__ == '__main__':
@@ -39,4 +40,5 @@ if __name__ == '__main__':
     import asyncio
     # asyncio.run(m4p2main())
     # asyncio.run(m4p3main())
-    asyncio.run(m4p4main())
+    # asyncio.run(m4p4main())
+    asyncio.run(m4p5main())
