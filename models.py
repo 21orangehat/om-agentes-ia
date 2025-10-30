@@ -13,14 +13,23 @@ class UserInfo():
 
 
 @dataclass
+class Produto():
+    """
+    Classe para representar informações
+    de um produto, contendo nome e preço.
+    """
+    nome: str
+    preco: float
+
+
+@dataclass
 class Compra():
     """
     Classe para representar informações
     de uma compra, contendo o produto e o preço.
     """
     id: str
-    produto: str
-    preco: float
+    produto: Produto
 
 @dataclass
 class Cliente():
