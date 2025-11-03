@@ -4,7 +4,7 @@ import httpx
 from random import randint
 from datetime import datetime
 from typing import List
-from agents import function_tool, RunContextWrapper
+from agents import Agent, function_tool, RunContextWrapper
 
 from models import UserInfo, Cliente, Compra
 
@@ -112,7 +112,7 @@ def get_client_recent_purchases(wrapper: RunContextWrapper[Cliente], n: int) -> 
     """
     compras: List[Compra] = wrapper.context.get_recent_purchases(n)
 
-    purchase_list = '. '.join([f"{c.produto} US$({c.preco:.2f})" for c in compras])
+    purchase_list = '. '.join([f"{c.produto.nome} US$({c.produto.preco:.2f})" for c in compras])
 
     return f"Compras: {purchase_list}"
 
@@ -134,8 +134,7 @@ def get_number():
     return n
 
 
-@function_tool
-def dynamic_client_instructions(wrapper: RunContextWrapper[Cliente]) -> str:
+def dynamic_client_instructions(wrapper: RunContextWrapper[Cliente], agent: Agent[Cliente]) -> str:
     """
     Função para gerar instruções dinâmicas de acordo com o cliente.
     """

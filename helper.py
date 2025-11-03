@@ -22,9 +22,11 @@ def get_model() -> OpenAIChatCompletionsModel:
     Com o model qwen/qwen3-4b-thinking-2507:2, ficou muito lento...
 
     Com o model openai/gpt-oss-20b, ficou bom...
+
+    Com o model mistralai/magistral-small-2509, ficou bom...
     """
     model: OpenAIChatCompletionsModel = OpenAIChatCompletionsModel(
-        model='openai/gpt-oss-20b',
+        model='mistralai/magistral-small-2509',
         openai_client=AsyncOpenAI(
             api_key=os.environ.get('OPENAI_API_KEY'), 
             base_url="http://127.0.0.1:1234/v1",
